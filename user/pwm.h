@@ -6,7 +6,7 @@ void delay_init(u8 SYSCLK);
 void delayus(u32 us);
 void delayms(u16 ms);
 void TIM1_Mode_Config(void) ;
-
+void TIM3_PWMShiftInit(void) ;
 #define FREQQQ 97951
 #define FREQQQ_ARR 72000000/FREQQQ
 

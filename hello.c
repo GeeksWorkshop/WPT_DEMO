@@ -25,7 +25,11 @@ int main(void)
 	Clock_Init(9);
 	delay_init(72);
 	delayms(500);
-	GPIO_PinRemapConfig(GPIO_Remap_SWJ_JTAGDisable, ENABLE);   
+	GPIO_PinRemapConfig(GPIO_Remap_SWJ_JTAGDisable, ENABLE);  
+
+	TIM3_PWMShiftInit();
+while(1)
+{}	
 	//RCC_APB2PeriphClockCmd( RCC_APB2Periph_AFIO, ENABLE); 
 
 	NRF_GPIO_Config(); 
