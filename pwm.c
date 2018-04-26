@@ -2,10 +2,16 @@
 #include "stm32f10x_conf.h"
 #include "pwm.h"
 
+vu32 freq=1000000;
+vu32 freq_arr=72000000/100000-1;
 
+#define FREQQQ_ARR_MAX 72000000/FREQQQ*0.4
+#define FREQQQ_ARR_MIN 72000000/FREQQQ*0.1
 
 void TIM1_Mode_Config(void) 
 { 
+			freq=1000000;
+			freq_arr=72000000/freq-1;
       GPIO_InitTypeDef GPIO_InitStructure; 
       TIM_TimeBaseInitTypeDef TIM_BaseInitStructure; 
       TIM_OCInitTypeDef TIM_OCInitStructure; 
@@ -59,6 +65,8 @@ void TIM1_Mode_Config(void)
 
 void TIM3_PWMShiftInit(void)  
 {  
+		freq=100000;
+		freq_arr=72000000/freq-1;
     TIM_TimeBaseInitTypeDef  TIM_TimeBaseInitStruct;  
     GPIO_InitTypeDef  GPIO_InitStruct;  
     TIM_OCInitTypeDef TIM_OCInitStruct;  
@@ -81,7 +89,7 @@ void TIM3_PWMShiftInit(void)
       
     TIM_TimeBaseInitStruct.TIM_ClockDivision = TIM_CKD_DIV1;   //定时器不分频
     TIM_TimeBaseInitStruct.TIM_CounterMode   = TIM_CounterMode_Up;  
-    TIM_TimeBaseInitStruct.TIM_Period    = 1799;       //频率 = 72000000/PSC/(ARR+1) = 40KHz 
+    TIM_TimeBaseInitStruct.TIM_Period    = freq_arr;       //频率 = 72000000/PSC/(ARR+1) = 40KHz 
     TIM_TimeBaseInitStruct.TIM_Prescaler = 0;       
       
     TIM_TimeBaseInit(TIM3, &TIM_TimeBaseInitStruct);  
@@ -100,22 +108,29 @@ void TIM3_PWMShiftInit(void)
     //TIM1 CH1pwm输出配置                  
     TIM_OCInitStruct.TIM_Pulse=(TIM_TimeBaseInitStruct.TIM_Period+1)/2;                   //TIM1 CH1占空比：600/（ARR+1）=33.3%
    
-    TIM_OCInitStruct.TIM_OCPolarity=TIM_OCPolarity_Low;        //设置输出极性              
-    TIM_OCInitStruct.TIM_OCNPolarity=TIM_OCNPolarity_Low; 
+    TIM_OCInitStruct.TIM_OCPolarity=TIM_OCPolarity_High;        //设置输出极性              
+    TIM_OCInitStruct.TIM_OCNPolarity=TIM_OCNPolarity_High; 
 		TIM_OCInitStruct.TIM_OutputNState=TIM_OutputNState_Enable;//禁止互补端输出,缺失此语句无法调节输出极性                         
-    TIM_OC1Init(TIM1,&TIM_OCInitStruct);            
-  
+    TIM_OC1Init(TIM1,&TIM_OCInitStruct);
+		TIM1->CCR1=(TIM_TimeBaseInitStruct.TIM_Period+1)/2;
+
+		TIM3->CCR4=(TIM_TimeBaseInitStruct.TIM_Period+1)/2+10;
+		TIM3->CCR1=(TIM_TimeBaseInitStruct.TIM_Period+1)/2-10;
+		TIM1->CCR2=(TIM_TimeBaseInitStruct.TIM_Period+1)/2*0.1;//相位偏移
+		TIM1->BDTR=20;
     /**************************配置移相触发**************************/
-    TIM_OCInitStruct.TIM_Pulse = (TIM_TimeBaseInitStruct.TIM_Period+1)/2*0.2;             //约需2个定时器周期触发，移相：360*600/(ARR+2)= 120度
+  //  TIM_OCInitStruct.TIM_Pulse = (TIM_TimeBaseInitStruct.TIM_Period+1)/2*0.2;             //约需2个定时器周期触发，移相：360*600/(ARR+2)= 120度
     TIM_OC2Init(TIM1,&TIM_OCInitStruct);            //需要CH2上升沿触发如果无法触发移相请更改CH2输出极性
   
+
     /**************************配置主从模式*************************/
     TIM_SelectOutputTrigger(TIM1, TIM_TRGOSource_OC2Ref);  //TIM1 OC2触发从定时器
     TIM_SelectMasterSlaveMode(TIM1, TIM_MasterSlaveMode_Enable); 
  
     TIM_SelectInputTrigger(TIM3, TIM_TS_ITR0);      //ITRO触发
     TIM_SelectSlaveMode(TIM3, TIM_SlaveMode_Trigger);   
-	
+		TIM3->CCR4=(TIM_TimeBaseInitStruct.TIM_Period+1)/2+10;
+		TIM3->CCR1=(TIM_TimeBaseInitStruct.TIM_Period+1)/2-10;
     TIM_Cmd(TIM1, ENABLE);
     TIM_CtrlPWMOutputs(TIM1, ENABLE);               //高级定时器pwm输出使能，一定要记得打开
 }  

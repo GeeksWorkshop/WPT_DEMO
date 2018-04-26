@@ -17,8 +17,12 @@ u8 Tx_Buf1[]={0x25};
 //=============================
 //Ö÷º¯Êý
 //=============================
-vu16 adc_ch1,adc_ch2,adc_ch3;
+vu16 adc_ch1,adc_ch2,adc_ch3,change;
 double adcval_ch1,adcval_ch2,adcval_ch3;
+
+extern vu32 freq;
+extern vu32 freq_arr;
+
 int main(void)
 {	
 
@@ -28,8 +32,21 @@ int main(void)
 	GPIO_PinRemapConfig(GPIO_Remap_SWJ_JTAGDisable, ENABLE);  
 
 	TIM3_PWMShiftInit();
-while(1)
-{}	
+		while(1)
+		{
+			if(	change==1)
+			{	
+				freq_arr=72000000/freq-1;
+				TIM1->ARR= freq_arr; 
+				TIM3->ARR=freq_arr;
+				TIM1->CCR1=(freq_arr+1)/2;
+				TIM3->CCR4=(freq_arr+1)/2+10;
+				TIM3->CCR1=(freq_arr+1)/2-10;
+
+				change=0;
+			}
+			
+		}	
 	//RCC_APB2PeriphClockCmd( RCC_APB2Periph_AFIO, ENABLE); 
 
 	NRF_GPIO_Config(); 
