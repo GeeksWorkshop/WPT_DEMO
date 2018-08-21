@@ -88,25 +88,25 @@ void RX_Mode(void);
 ////************************************
 /*模拟SPI端口输出输入定义*/
 
-#define CE_H GPIO_SetBits(GPIOB, GPIO_Pin_14)
-#define CE_L GPIO_ResetBits(GPIOB, GPIO_Pin_14)
+#define CE_H GPIO_SetBits(GPIOB, GPIO_Pin_12)
+#define CE_L GPIO_ResetBits(GPIOB, GPIO_Pin_12)
    
-#define CSN_H GPIO_SetBits(GPIOB, GPIO_Pin_15)
-#define CSN_L GPIO_ResetBits(GPIOB, GPIO_Pin_15)
+#define CSN_H GPIO_SetBits(GPIOB, GPIO_Pin_14)
+#define CSN_L GPIO_ResetBits(GPIOB, GPIO_Pin_14)
 
-#define SCK_H GPIO_SetBits(GPIOB, GPIO_Pin_11)
-#define SCK_L GPIO_ResetBits(GPIOB, GPIO_Pin_11)
+#define SCK_H GPIO_SetBits(GPIOB, GPIO_Pin_10)
+#define SCK_L GPIO_ResetBits(GPIOB, GPIO_Pin_10)
 
-#define MOSI_H GPIO_SetBits(GPIOB, GPIO_Pin_12)
-#define MOSI_L GPIO_ResetBits(GPIOB, GPIO_Pin_12)
+#define MOSI_H GPIO_SetBits(GPIOB, GPIO_Pin_15)
+#define MOSI_L GPIO_ResetBits(GPIOB, GPIO_Pin_15)
 
-#define MISO_H GPIO_SetBits(GPIOB, GPIO_Pin_10)
-#define MISO_L GPIO_ResetBits(GPIOB, GPIO_Pin_10)
+#define MISO_H GPIO_SetBits(GPIOB, GPIO_Pin_11)
+#define MISO_L GPIO_ResetBits(GPIOB, GPIO_Pin_11)
 
-#define IRQ_H GPIO_SetBits(GPIOB, GPIO_Pin_2)
-#define IRQ_L GPIO_ResetBits(GPIOB, GPIO_Pin_2)
+#define IRQ_H GPIO_SetBits(GPIOA, GPIO_Pin_9)
+#define IRQ_L GPIO_ResetBits(GPIOA, GPIO_Pin_9)
 
-#define MISO_Read	GPIO_ReadInputDataBit(GPIOB, GPIO_Pin_10)
+#define MISO_Read	GPIO_ReadInputDataBit(GPIOB, GPIO_Pin_11)
 
 //*********************************************NRF24L01*************************************
 #define TX_ADR_WIDTH    5   	// 5 uints TX address width

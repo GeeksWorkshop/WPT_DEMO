@@ -11,6 +11,8 @@
 #define 		RST_5110_0 		(GPIOA -> BRR = 1 << 2)
 #define 		RST_5110_1 		(GPIOA -> BSRR = 1 << 2)
 
+#define 		LCD_5110_0 		(GPIOA -> BRR = 1 << 7)
+#define 		LCD_5110_1 		(GPIOA -> BSRR = 1 << 7)
 void LCD_init(void);
 void LCD_clear(void);
 void LCD_move_chinese_string(unsigned char X, unsigned char Y, unsigned char T); 
@@ -25,4 +27,4 @@ void LCD_draw_bmp_pixel(unsigned char X,unsigned char Y,unsigned char *map,
 void LCD_write_byte(unsigned char dat, unsigned char dc);
 void LCD_set_XY(unsigned char X, unsigned char Y);
 void delay_1us(void);                 
-
+void delay_1ms(void); 
